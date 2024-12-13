@@ -1,5 +1,3 @@
-// src/core/virtualDom.js
-
 export function h(tag, props, ...children) {
     return { tag, props, children };
 }

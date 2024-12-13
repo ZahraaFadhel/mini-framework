@@ -168,7 +168,5 @@ app.mount(todoApp, document.body);
 3. **State Management**: Ensures that data is consistent and easily accessible across the app.
 4. **Routing System**: Synchronizes the application state with the URL for a better user experience.
 
----
 
-With this guide and framework, you are ready to start building scalable and interactive web applications!
 
