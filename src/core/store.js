@@ -1,3 +1,4 @@
+
 class Store {
     constructor(initialState = {}) {
       this.state = initialState;

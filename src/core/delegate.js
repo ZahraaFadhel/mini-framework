@@ -1,4 +1,3 @@
-// src/core/delegate.js
 
 export function delegate(parent, selector, event, handler) {
     parent.addEventListener(event, function (e) {

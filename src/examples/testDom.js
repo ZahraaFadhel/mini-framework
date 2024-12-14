@@ -1,5 +1,5 @@
-import { createElement, setAttribute, appendChild, addEventListener } from '../core/dom';
-import { h, render } from '../core/virtualDom';
+import { createElement, setAttribute, appendChild, addEventListener } from '../core/dom.js';
+import { h, render } from '../core/virtualDom.js';
 
 // Create elements using utility functions
 const div = createElement('div', { class: 'container' }, 'Hello, World!');
