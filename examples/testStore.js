@@ -1,4 +1,4 @@
-import Store from '../core/store.js';
+import Store from '../src/core/store.js';
 
 // Initial state
 const initialState = {

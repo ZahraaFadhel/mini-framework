@@ -1,5 +1,5 @@
-import EventEmitter from '../core/events.js';
-import { delegate } from '../core/delegate.js';
+import EventEmitter from '../src/core/events.js';
+import { delegate } from '../src/core/delegate.js';
 
 const eventEmitter = new EventEmitter();
 

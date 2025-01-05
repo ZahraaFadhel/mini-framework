@@ -4,6 +4,14 @@ This document outlines the steps and provides documentation to create your own m
 
 ---
 
+- double click to edit
+- complete cross through ✓
+- filter ✓
+- no to do msg 
+- couting for remaining tasks
+- clear all completed 
+- clear all
+
 ## Project To-Do List
 
 ### 1. **Set Up Project Environment**

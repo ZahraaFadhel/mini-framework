@@ -1,4 +1,4 @@
-import Router from '../core/router.js';
+import Router from '../src/core/router.js';
 
 const router = new Router();
 
