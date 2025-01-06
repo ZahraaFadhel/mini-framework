@@ -53,6 +53,7 @@ body {
   padding: 0.5rem;
   display: inline-block;
   transition: background-color 0.3s;
+  width: 100%;
 }
 
 .filters a:hover {
@@ -88,6 +89,7 @@ body {
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   transition: background-color 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
 }
 
 .todo:hover {
@@ -108,9 +110,8 @@ body {
 }
 
 .todo label {
-  flex: 1;
   font-size: 1rem;
-  cursor: pointer;
+  flex: 1;
 }
 
 .todo .delete {
@@ -161,7 +162,7 @@ body {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .input-container input {
@@ -209,6 +210,84 @@ footer.info p {
   margin: 0.5rem 0;
   font-size: 0.875rem;
 }
+
+.edit-input {
+  width: 100%;
+  font-size: inherit;
+  border: none;
+  border-bottom: 1px solid #bdc3c7; /* Underline for the input */
+  background: none;
+  outline: none;
+  color: #2c3e50;
+  padding: 4px 0; /* Adjust padding for alignment */
+  box-sizing: border-box;
+  transition: border-bottom-color 0.3s ease; /* Smooth transition for underline color */
+  margin-right: 15px;
+}
+
+.edit-input:focus {
+  border-bottom-color: #1abc9c; /* Highlight underline on focus */
+}
+
+#no-todos-msg {
+  text-align: center;
+  font-size: 1.1rem;
+  color: #888;
+  margin: 1.5rem;
+}
+
+.options-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 10px;
+  background: none;
+  border-radius: 8px;
+}
+
+.options-container .option, .remaining-items {
+  font-size: 12px;
+  margin: 0 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  background: none;
+}
+
+.options-container .option button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 14px;
+  color: inherit;
+  cursor: pointer;
+}
+
+.options-container .option i {
+  margin-right: 5px;
+}
+
+.options-container .option.remaining-items {
+  flex: 1;
+  font-weight: bold;
+  text-align: left;
+}
+
+.options-container .option.clear-all {
+  color: #e74c3c;
+}
+
+.options-container .option.mark-all-completed {
+  color: #2ecc71;
+}
+
+.options-container .option.clear-all:hover,
+.options-container .option.mark-all-completed:hover,
+.options-container .option.clear-completed:hover {
+  transform: scale(1.05);
+}
+
 
 @media (max-width: 768px) {
   .main-container {

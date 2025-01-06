@@ -1,4 +1,4 @@
-import { appendChild, addEventListener } from "../../src/core/dom.js";
+import { createElement, appendChild, addEventListener } from "../../src/core/dom.js";
 import { h, render } from "../../src/core/virtualDom.js";
 import { localStorageMiddleware } from "./store/middleware.js";
 import Store from "../../src/core/store.js";
@@ -16,7 +16,8 @@ if (document.readyState === "loading") {
 
 function initApp() {
   const savedTodos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  const initialFilter = location.hash.replace("#/", "") || "all";
+  let initialFilter = location.hash.replace("#/", "");
+  if (initialFilter == "") initialFilter = "all";
 
   const store = new Store(
     {
@@ -41,6 +42,7 @@ function initApp() {
         renderTodos(state.todos, state.filter);
       });
     } else if (state.lastChangedProp === "filter") {
+      if (state.filter == "") state.filter = "all";
       renderFilters(state.filter);
       renderTodos(state.todos, state.filter);
     }
@@ -49,9 +51,7 @@ function initApp() {
   // Listen to hash changes to update filter
   window.addEventListener("hashchange", () => {
     let newFilter = location.hash.replace("#/", "");
-    if(newFilter == "")
-      newFilter = "all";
-    console.log("newFilter", newFilter);
+    if (newFilter == "") newFilter = "all";
     store.setState({ filter: newFilter, lastChangedProp: "filter" });
     renderFilters(newFilter);
   });
@@ -115,20 +115,128 @@ function setupEventHandlers(store) {
     store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
   });
 
+  // toggle the checkbox when clicking on the <li>
+  delegate(todoList, "li", "click", (event) => {
+    const li = event.target.closest("li");
+    if (!li) return;
+
+    const checkbox = li.querySelector(".toggle");
+    if (!checkbox) return;
+
+    // Toggle the checkbox
+    checkbox.checked = !checkbox.checked;
+
+    // Emit the change event to update the store
+    const id = Number(li.id);
+    const updatedTodos = store
+      .getState()
+      .todos.map((todo) =>
+        todo.id == id ? { ...todo, completed: checkbox.checked } : todo
+      );
+
+    store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
+  });
+
   // Handle filter change
   const filterLinks = document.querySelectorAll(".filters a");
   filterLinks.forEach((link) => {
     addEventListener(link, "click", (event) => {
-      event.preventDefault();
       const newFilter = event.target.getAttribute("href").replace("#/", "");
       store.setState({ filter: newFilter, lastChangedProp: "filter" });
     });
+  });
+
+  // Handle double-click to edit a to-do
+  delegate(todoList, "label", "dblclick", (event) => {
+    const label = event.target;
+    const li = label.closest("li");
+    if (!li) return;
+
+    const id = Number(li.id);
+    const todo = store.getState().todos.find((todo) => todo.id === id);
+    if (!todo) return;
+
+    // Replace the label with an input field
+    const input = createElement("input", { class: "edit-input", type: "text", value: todo.title });
+    li.replaceChild(input, label);
+
+    // Focus the input and select the text
+    input.focus();
+    input.select();
+
+    // Save changes on blur or Enter key
+    let isReplacing = false;
+
+    const saveChanges = () => {
+      if (isReplacing) return;
+
+      const updatedTitle = input.value.trim();
+      if (updatedTitle) {
+        const updatedTodos = store
+          .getState()
+          .todos.map((todo) =>
+            todo.id === id ? { ...todo, title: updatedTitle } : todo
+          );
+
+        store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
+      }
+
+      if (li.contains(input)) {
+        isReplacing = true;
+        li.replaceChild(label, input);
+        label.textContent = updatedTitle || todo.title;
+        isReplacing = false;
+      }
+    };
+
+    input.addEventListener("blur", saveChanges);
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") {
+        saveChanges();
+      }
+    });
+  });
+
+  // Mark all as completed
+  const markCompleted = document
+    .querySelector(".mark-all-completed")
+
+    addEventListener(markCompleted, "click", () => {
+      const todos = store.getState().todos.map((todo) => ({
+        ...todo,
+        completed: true,
+      }));
+      store.setState({ todos, lastChangedProp: "todos" });
+    });
+
+  // Clear all todos
+  const clearAll = document.querySelector(".clear-all")
+  addEventListener(clearAll, "click", () => {
+    store.setState({ todos: [], lastChangedProp: "todos" });
+  });
+
+  // Bind click event to 'Clear Completed' button
+  const clearCompletedBtn = document.querySelector(".clear-completed");
+  addEventListener(clearCompletedBtn, "click", () => {
+    const todos = store.getState().todos.filter((todo) => !todo.completed);
+    store.setState({ todos, lastChangedProp: "todos" });
   });
 }
 
 function renderTodos(todos, filter) {
   const todoList = document.getElementById("todo-list");
   todoList.innerHTML = ""; // Clear existing content
+
+  // Add a section to display remaining tasks
+  const remainingCount = todos.filter((todo) => !todo.completed).length;
+  document.querySelector(
+    ".remaining-items"
+  ).textContent = `${remainingCount} item${
+    remainingCount === 1 ? "" : "s"
+  } remaining`;
+  if (remainingCount === 0) {
+    document.querySelector(".remaining-items").textContent = `All Done!`;
+  }
 
   let filteredTodos = [];
   if (filter == "active") {
@@ -137,6 +245,12 @@ function renderTodos(todos, filter) {
     filteredTodos = todos.filter((todo) => todo.completed);
   } else {
     filteredTodos = todos; // all
+  }
+
+  if (filteredTodos.length === 0) {
+    let msg = filter == "all" ? "No todos found" : `No ${filter} todos found`;
+    todoList.innerHTML = `<li id='no-todos-msg'>${msg}</li>`;
+    return;
   }
 
   filteredTodos.forEach((todo) => {
@@ -169,8 +283,8 @@ function renderFilters(filter) {
   const filterLinks = document.querySelectorAll(".filters a");
   filterLinks.forEach((link) => {
     let filterValue = link.getAttribute("href").replace("#/", "");
-    if(filterValue == "")
-      filterValue = "all";
+    if (filterValue == "") filterValue = "all";
+
     link.classList.toggle("selected", filter === filterValue);
   });
 }

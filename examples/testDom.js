@@ -8,7 +8,6 @@ appendChild(document.body, div);
 
 // Create elements using Virtual DOM
 const vNode = h('div', { class: 'container' }, 'Hello, Virtual DOM!', h('h3', { class: "someclass" }, 'This is an h3.'), h('p', { class: "someclass" }, 'This is a paragraph.'));
-console.log('vNode working ', vNode);
 const element = render(vNode);
 appendChild(document.body, element);
 
