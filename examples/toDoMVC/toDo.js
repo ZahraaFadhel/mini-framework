@@ -235,7 +235,11 @@ function renderTodos(todos, filter) {
     remainingCount === 1 ? "" : "s"
   } remaining`;
   if (remainingCount === 0) {
-    document.querySelector(".remaining-items").textContent = `All Done!`;
+    if(todos.length > 0){
+      document.querySelector(".remaining-items").textContent = `All Done!`;
+    } else {
+      document.querySelector(".remaining-items").textContent = ``;
+    }
   }
 
   let filteredTodos = [];
