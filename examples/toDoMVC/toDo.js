@@ -141,7 +141,7 @@ function setupEventHandlers(store) {
   const filterLinks = document.querySelectorAll(".filters a");
   filterLinks.forEach((link) => {
     addEventListener(link, "click", (event) => {
-      const newFilter = event.target.getAttribute("href").replace("#/", "");
+      const newFilter = event.target.getAttribute("href").replace("index.html#/", "");
       store.setState({ filter: newFilter, lastChangedProp: "filter" });
     });
   });

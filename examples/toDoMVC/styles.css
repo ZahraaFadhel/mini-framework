@@ -1,0 +1,162 @@
+/* General Styles */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #e3f2fd;
+    /* Light blue background */
+}
+
+#app {
+    width: 60%;
+    max-width: 60%;
+    margin: auto;
+    text-align: center;
+}
+
+/* Common Container Styles (for all pages) */
+.container {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin: 2%;
+}
+
+/* Button Styles (for all pages) */
+button {
+    padding: 15px 30px;
+    /* Increased button size */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    background: transparent;
+    background-image: linear-gradient(45deg, #007bff, #0056b3);
+    /* Blue gradient */
+    color: white;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    /* Invisible border for smooth hover effect */
+    outline: none;
+    margin: 10px;
+    color: white;
+    padding: 15px 30px;
+    /* Larger button size */
+}
+
+button:hover {
+    opacity: 0.9;
+    background-image: linear-gradient(45deg, #0056b3, #007bff);
+    /* Reversed gradient on hover */
+}
+
+.login-input {
+    width: 50%;
+    padding: 15px 30px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.login-button {
+    background-color: transparent;
+    /* Transparent button */
+    background-image: linear-gradient(45deg, #007bff, #0056b3);
+    /* Blue gradient */
+    color: white;
+}
+
+.login-button:hover {
+    background-image: linear-gradient(45deg, #0056b3, #007bff);
+    /* Hover gradient */
+}
+
+.welcome-message {
+    font-size: 2rem;
+    /* Bigger, bolder text for the welcome message */
+    color: #2c3e50;
+    /* Darker text for better contrast */
+    font-family: 'Roboto', sans-serif;
+    /* Stylish header font */
+    margin-bottom: 15px;
+}
+
+.sub-message {
+    font-size: 1.2rem;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+/* Page Headers for Page 1, 2, and 3 */
+.page-header {
+    font-size: 2rem;
+    color: #333;
+    font-family: 'Roboto', sans-serif;
+    margin-bottom: 10px;
+    color: #63beef;
+    /* Blue color for Page 1 */
+}
+
+/* Content Styling for Page 1, 2, and 3 */
+.page-content {
+    font-family: 'Roboto', sans-serif;
+    font-weight: lighter;
+    font-style: italic;
+    font-size: 1.1rem;
+    color: #555;
+    margin-top: 10px;
+    background-color: rgb(241, 250, 255);
+    /* Light blue background for Page 1 */
+    padding: 20px;
+    border-radius: 10px;
+    align-items: center;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+
+.documentation-content {
+    text-align: justify;
+}
+
+.page-description {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 15px;
+}
+
+.team-introduction {
+    font-size: 1rem;
+    color: #777;
+    margin-bottom: 25px;
+}
+
+.footer {
+    font-size: 1rem;
+    color: #999;
+    margin-top: 30px;
+}
+
+.footer p {
+    margin: 0;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+    #app {
+        width: 90%;
+    }
+
+    .container {
+        padding: 15px;
+    }
+
+    button {
+        width: 100%;
+    }
+}
