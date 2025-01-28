@@ -1,12 +1,22 @@
 {
     "name": "mini-framework",
     "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "type": "module",
+    "description": "Now that you have already used a framework of your choice, you must now implement some features on a framework of your own. That's right, you are going to create a framework.\n\nBe aware that a framework is different from a library. When you call a method from a library, you are in control. But with a framework, the control is inverted: the framework calls you.\n\nObjectives\nYour framework should implement:\n\n- Abstracting the DOM\n- Routing System\n- State Management\n- Event Handling",
+    "main": "src/index.js",
     "scripts": {
-      "start": "http-server ."
+        "start": "live-server examples/toDoMVC  --entry-file=index.html -o -c-1 --mount=/src:src",
+        "test": "echo \"Error: no test specified\" && exit 1",
+      "server": "node Server/server.js"
     },
-    "author": "",
-    "license": "ISC"
+    "repository": {
+      "type": "git",
+      "url": ""
+    },
+    "keywords": [],
+    "author": "Mariam, Ruqaya, Zahraa",
+    "license": "ISC",
+    "dependencies": {
+      "live-server": "^1.2.0",
+      "ws": "^8.18.0"
+    }
   }
