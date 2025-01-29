@@ -14,7 +14,7 @@ if (document.readyState === "loading") {
   initApp();
 }
 
-function initApp() {
+export function initApp() {
   const savedTodos = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
   let initialFilter = location.hash.replace("#/", "");
   if (initialFilter == "") initialFilter = "all";

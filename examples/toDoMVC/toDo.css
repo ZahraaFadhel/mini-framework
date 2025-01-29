@@ -161,7 +161,6 @@ body {
 .input-container {
   display: flex;
   align-items: center;
-  gap: 1rem;
   margin-bottom: 0.8rem;
 }
 
@@ -280,6 +279,10 @@ footer.info p {
 
 .options-container .option.mark-all-completed {
   color: #2ecc71;
+}
+
+.options-container .option.clear-completed {
+  color: #ccaa2e;
 }
 
 .options-container .option.clear-all:hover,
