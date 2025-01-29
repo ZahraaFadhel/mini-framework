@@ -1,21 +1,30 @@
-
 ## Framework Documentation
 
 ### Table of Contents
 
-1. [Introduction](https://chatgpt.com/c/677ed9c5-7a84-800a-ad4d-5c9f6197b77f#introduction)
-2. [Installation &amp; Setup](https://chatgpt.com/c/677ed9c5-7a84-800a-ad4d-5c9f6197b77f#installation--setup)
-3. [Core Modules](https://chatgpt.com/c/677ed9c5-7a84-800a-ad4d-5c9f6197b77f#core-modules)
-4. [API Reference](https://chatgpt.com/c/677ed9c5-7a84-800a-ad4d-5c9f6197b77f#api-reference)
-5. [Implementation Details](https://chatgpt.com/c/677ed9c5-7a84-800a-ad4d-5c9f6197b77f#implementation-details)
-6. [Examples](https://chatgpt.com/c/677ed9c5-7a84-800a-ad4d-5c9f6197b77f#examples)
-7. [Best Practices](https://chatgpt.com/c/677ed9c5-7a84-800a-ad4d-5c9f6197b77f#best-practices)
+- [Framework Documentation](#framework-documentation)
+  - [Table of Contents](#table-of-contents)
+- [Introduction](#introduction)
+  - [Features](#features)
+- [Installation \& Setup](#installation--setup)
+  - [Steps:](#steps)
+- [Core Modules](#core-modules)
+  - [1. `createElement`](#1-createelement)
+    - [Example Usage](#example-usage)
+  - [2. `setAttribute`](#2-setattribute)
+  - [3. `addEventListener`](#3-addeventlistener)
+- [API Reference](#api-reference)
+  - [1. **State Management**](#1-state-management)
+    - [Store Class](#store-class)
+  - [2. **Routing System**](#2-routing-system)
+    - [Router Class](#router-class)
+- [Best Practices](#best-practices)
 
 ---
 
 ## Introduction
 
-Welcome to  **My Mini Framework** ! This framework simplifies web development by abstracting the DOM, managing state, and providing a robust routing system. Below are instructions and examples to help you get started.
+Welcome to **My Mini Framework**! This framework simplifies web development by abstracting the DOM, managing state, and providing a robust routing system. Below are instructions and examples to help you get started.
 
 ### Features
 
@@ -52,29 +61,7 @@ Once imported, you can immediately start using the modules. Refer to the Core Mo
 
 ## Core Modules
 
-### 1. `delegate`
-
-Efficiently delegates an event to a child element matching a selector.
-
-```javascript
-export function delegate(parent, selector, event, handler) {
-  parent.addEventListener(event, function (e) {
-    if (e.target.matches(selector)) {
-      handler(e);
-    }
-  });
-}
-```
-
-* **Parameters** :
-* `parent`: The parent element to listen on.
-* `selector`: The CSS selector for matching child elements.
-* `event`: The type of event to listen for (e.g., `"click"`).
-* `handler`: The callback function executed when the event occurs.
-
----
-
-### 2. `createElement`
+### 1. `createElement`
 
 Creates a DOM element with specified attributes and children.
 
@@ -98,14 +85,38 @@ export function createElement(tag, props = {}, ...children) {
 }
 ```
 
-* **Parameters** :
-* `tag`: The HTML tag to create (e.g., `"div"`, `"span"`).
-* `props`: An object of attributes to set on the element.
-* `...children`: Child elements or text content to append.
+* **Parameters**:
+  * `tag`: The HTML tag to create (e.g., `"div"`, `"button"`).
+  * `props`: An object of attributes to set on the element.
+  * `...children`: Child elements or text content to append.
+
+#### Example Usage
+
+Creating a simple button:
+
+```javascript
+const button = createElement("button", { id: "myButton", class: "btn" }, "Click Me");
+document.body.appendChild(button);
+```
+
+Creating a checkbox:
+
+```javascript
+const checkbox = createElement("input", { type: "checkbox", id: "myCheckbox" });
+document.body.appendChild(checkbox);
+```
+
+Creating a labeled checkbox:
+
+```javascript
+const label = createElement("label", { for: "myCheckbox" }, "Accept Terms");
+const checkboxWithLabel = createElement("div", {}, checkbox, label);
+document.body.appendChild(checkboxWithLabel);
+```
 
 ---
 
-### 3. `setAttribute`
+### 2. `setAttribute`
 
 Sets an attribute on a DOM element.
 
@@ -115,30 +126,16 @@ export function setAttribute(element, key, value) {
 }
 ```
 
-* **Parameters** :
-* `element`: The target DOM element.
-* `key`: The attribute name.
-* `value`: The attribute value.
-
----
-
-### 4. `appendChild`
-
-Appends a child element to a parent element.
+* **Example Usage**:
 
 ```javascript
-export function appendChild(parent, child) {
-  parent.appendChild(child);
-}
+const button = document.getElementById("myButton");
+setAttribute(button, "disabled", "true");
 ```
-
-* **Parameters** :
-* `parent`: The parent DOM element.
-* `child`: The child element to append.
 
 ---
 
-### 5. `addEventListener`
+### 3. `addEventListener`
 
 Adds an event listener to an element.
 
@@ -148,18 +145,19 @@ export function addEventListener(element, event, handler) {
 }
 ```
 
-* **Parameters** :
-* `element`: The DOM element to attach the event to.
-* `event`: The event type (e.g., `"click"`).
-* `handler`: The callback function executed when the event occurs.
+* **Example Usage**:
+
+```javascript
+addEventListener(button, "click", () => {
+  alert("Button Clicked!");
+});
+```
 
 ---
 
 ## API Reference
 
 ### 1. **State Management**
-
-Centralized state management ensures predictable and consistent app behavior.
 
 #### Store Class
 
@@ -194,16 +192,14 @@ class Store {
 export default Store;
 ```
 
-* **Methods** :
-* `getState()`: Returns the current state.
-* `setState(newState)`: Merges new state with the current state and notifies listeners.
-* `subscribe(listener)`: Registers a listener for state updates.
+* **Methods**:
+  * `getState()`: Returns the current state.
+  * `setState(newState)`: Merges new state with the current state and notifies listeners.
+  * `subscribe(listener)`: Registers a listener for state updates.
 
 ---
 
 ### 2. **Routing System**
-
-Synchronizes app state with the URL.
 
 #### Router Class
 
@@ -245,36 +241,10 @@ class Router {
 export default Router;
 ```
 
-* **Methods** :
-* `addRoute(path, action)`: Maps a path to an action.
-* `navigate(path)`: Navigates to a specified route.
-* `onpopstate()`: Handles browser back/forward navigation.
-
----
-
-## Examples
-
-### TodoMVC Example
-
-```javascript
-const todoApp = createElement("div", {}, [
-  createElement(
-    "input",
-    { id: "new-todo", placeholder: "What needs to be done?" },
-    []
-  ),
-  createElement("button", { onClick: addTodo }, ["Add Todo"]),
-  createElement("ul", { id: "todo-list" }, []),
-]);
-
-function addTodo() {
-  const todoText = document.getElementById("new-todo").value;
-  const todoItem = createElement("li", {}, [todoText]);
-  render(todoItem, document.getElementById("todo-list"));
-}
-
-render(todoApp, document.body);
-```
+* **Methods**:
+  * `addRoute(path, action)`: Maps a path to an action.
+  * `navigate(path)`: Navigates to a specified route.
+  * `onpopstate()`: Handles browser back/forward navigation.
 
 ---
 
@@ -284,3 +254,4 @@ render(todoApp, document.body);
 2. Use route-specific components for better maintainability.
 3. Delegate event listeners to the parent when handling many child elements.
 4. Use `createElement` consistently for DOM manipulation to maintain virtual DOM integrity.
+

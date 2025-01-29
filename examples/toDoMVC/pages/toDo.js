@@ -342,15 +342,56 @@ function setupEventHandlers(store) {
     });
   });
 
-  // Mark all as completed
+  
+// Clear all todos on page load
+document.addEventListener("DOMContentLoaded", () => {
+  store.setState({ todos: [], lastChangedProp: "todos" });
+});
+
+  // Mark all as completed or uncompleted
   const markCompleted = document.querySelector(".mark-all-completed");
+  let firstClick = true; // Flag to track if this is the first click
 
   addEventListener(markCompleted, "click", () => {
-    const todos = store.getState().todos.map((todo) => ({
-      ...todo,
-      completed: true,
-    }));
-    store.setState({ todos, lastChangedProp: "todos" });
+    const currentTodos = store.getState().todos;
+    const allCompleted = currentTodos.every(todo => todo.completed); // Check if all are completed
+
+    if (firstClick) {
+      // First click logic
+      if (allCompleted) {
+        // If all were completed, toggle to uncompleted
+        const updatedTodos = currentTodos.map(todo => ({
+          ...todo,
+          completed: false,
+        }));
+        store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
+      } else {
+        // If not all are completed, toggle to completed
+        const updatedTodos = currentTodos.map(todo => ({
+          ...todo,
+          completed: true,
+        }));
+        store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
+      }
+      firstClick = false; // Set the flag to false after the first click
+    } else {
+      // Subsequent clicks logic
+      if (allCompleted) {
+        // If all are completed, mark them all uncompleted
+        const updatedTodos = currentTodos.map(todo => ({
+          ...todo,
+          completed: false,
+        }));
+        store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
+      } else {
+        // If not all are completed, mark them all as completed
+        const updatedTodos = currentTodos.map(todo => ({
+          ...todo,
+          completed: true,
+        }));
+        store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
+      }
+    }
   });
 
   // Clear all todos
@@ -379,8 +420,7 @@ function renderTodos(todos, filter) {
   const remainingCount = todos.filter((todo) => !todo.completed).length;
   document.querySelector(
     ".remaining-items"
-  ).textContent = `${remainingCount} item${
-    remainingCount === 1 ? "" : "s"
+  ).textContent = `${remainingCount} item${remainingCount === 1 ? "" : "s"
   } remaining`;
   if (remainingCount === 0) {
     if (todos.length > 0) {
@@ -440,3 +480,4 @@ function renderFilters(filter) {
     link.classList.toggle("selected", filter === filterValue);
   });
 }
+
