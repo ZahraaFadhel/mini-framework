@@ -203,6 +203,10 @@ button:hover {
     color: #1abc9c;
 }
 
+.filters-container h3{
+    color: white;
+}
+
 /* Main Content */
 .main-content {
     flex: 1;

@@ -1,7 +1,7 @@
 import {
   createElement,
-  setAttribute,
   appendChild,
+  setAttribute,
 } from "../../../src/core/dom.js";
 
 // Documentation Page Function
@@ -11,6 +11,15 @@ export function documentationPage() {
   const root = document.getElementById('app');
   root.innerHTML = '';
 
+  // Create back button
+    const backButton = createElement("button");
+    setAttribute(backButton, "id", "back-button");
+    backButton.textContent = "← Back";
+    backButton.addEventListener("click", () => {
+      window.location.href = "http://127.0.0.1:8080/";
+    });
+
+    root.appendChild(backButton);
   // Create content for Page 2
   const container = createElement('div', { class: 'container' });
 

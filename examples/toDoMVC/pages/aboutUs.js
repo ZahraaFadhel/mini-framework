@@ -18,7 +18,7 @@ export function aboutUsPage() {
   setAttribute(backButton, "id", "back-button");
   backButton.textContent = "← Back";
   backButton.addEventListener("click", () => {
-    window.location.href = "http://127.0.0.1:8080/#/home";
+    window.location.href = "http://127.0.0.1:8080";
   });
 
   // Create header for About Us

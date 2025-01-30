@@ -9,8 +9,6 @@ export function homePage() {
   const root = document.getElementById("app");
   root.innerHTML = ""; // Clear previous content
 
-  const username = localStorage.getItem("username") || "Guest";
-
   // Create home container
   const container = createElement("div");
   setAttribute(container, "class", "container");
@@ -18,7 +16,6 @@ export function homePage() {
   // Create header for Home
   const header = createElement("h1");
   setAttribute(header, "class", "page-header");
-  header.textContent = `Welcome, ${username}!`;
 
   const content = createElement("div");
   setAttribute(content, "class", "page-content");

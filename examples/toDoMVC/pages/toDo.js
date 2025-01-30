@@ -20,7 +20,7 @@ export function toDoListPage() {
   setAttribute(backButton, "id", "back-button");
   backButton.textContent = "← Back";
   backButton.addEventListener("click", () => {
-    window.location.href = "http://127.0.0.1:8080/#/home";
+    window.location.href = "http://127.0.0.1:8080";
   });
 
   root.appendChild(backButton);
@@ -216,7 +216,12 @@ function setupEventHandlers(store) {
   let addBtn = document.getElementById("add-todo-btn");
 
   addEventListener(addBtn, "click", () => {
-    eventEmitter.emit("addTodo", inputElement.value.trim());
+    let input = inputElement.value.trim();
+    if(input === ""){
+      alert("Please enter a todo item");
+      return;
+    }
+    eventEmitter.emit("addTodo", input);
     inputElement.value = "";
   });
 
@@ -282,7 +287,7 @@ function setupEventHandlers(store) {
     addEventListener(link, "click", (event) => {
       const newFilter = event.target
         .getAttribute("href")
-        .replace("index.html#/", "");
+        .replace("#/toDoListPage/", "");
       store.setState({ filter: newFilter, lastChangedProp: "filter" });
     });
   });
@@ -342,67 +347,66 @@ function setupEventHandlers(store) {
     });
   });
 
-  
-// Clear all todos on page load
-document.addEventListener("DOMContentLoaded", () => {
-  store.setState({ todos: [], lastChangedProp: "todos" });
-});
-
-  // Mark all as completed or uncompleted
-  const markCompleted = document.querySelector(".mark-all-completed");
-  let firstClick = true; // Flag to track if this is the first click
-
-  addEventListener(markCompleted, "click", () => {
-    const currentTodos = store.getState().todos;
-    const allCompleted = currentTodos.every(todo => todo.completed); // Check if all are completed
-
-    if (firstClick) {
-      // First click logic
-      if (allCompleted) {
-        // If all were completed, toggle to uncompleted
-        const updatedTodos = currentTodos.map(todo => ({
-          ...todo,
-          completed: false,
-        }));
-        store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
-      } else {
-        // If not all are completed, toggle to completed
-        const updatedTodos = currentTodos.map(todo => ({
-          ...todo,
-          completed: true,
-        }));
-        store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
-      }
-      firstClick = false; // Set the flag to false after the first click
-    } else {
-      // Subsequent clicks logic
-      if (allCompleted) {
-        // If all are completed, mark them all uncompleted
-        const updatedTodos = currentTodos.map(todo => ({
-          ...todo,
-          completed: false,
-        }));
-        store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
-      } else {
-        // If not all are completed, mark them all as completed
-        const updatedTodos = currentTodos.map(todo => ({
-          ...todo,
-          completed: true,
-        }));
-        store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
-      }
-    }
+  // Clear all todos on page load
+  document.addEventListener("DOMContentLoaded", () => {
+    store.setState({ todos: [], lastChangedProp: "todos" });
   });
+
+  const markCompleted = document.querySelector(".mark-all-completed");
+  const icon = document.createElement("i"); // Create an icon element
+  icon.classList.add("fa");
+  markCompleted.prepend(icon); 
+
+  // Function to update button text and icon
+  function updateButton(allCompleted) {
+    icon.className = allCompleted ? "fa fa-check-square" : "fa fa-square"; // Toggle icons
+    markCompleted.textContent = allCompleted
+      ? " Mark all as uncompleted"
+      : " Mark all as completed";
+    markCompleted.prepend(icon); // Ensure the icon stays in place
+  }
+
+  markCompleted.addEventListener("click", () => {
+    if(store.getState().todos.length === 0){
+      alert("No todos to mark as completed/uncompleted");
+      return;
+    };
+
+    const currentTodos = store.getState().todos;
+    const allCompleted = currentTodos.every((todo) => todo.completed);
+
+    // Toggle all todos based on their current state
+    const updatedTodos = currentTodos.map((todo) => ({
+      ...todo,
+      completed: !allCompleted,
+    }));
+
+    store.setState({ todos: updatedTodos, lastChangedProp: "todos" });
+
+    // Update button text and icon
+    updateButton(!allCompleted);
+  });
+  
+  updateButton(false);
 
   // Clear all todos
   const clearAll = document.querySelector(".clear-all");
   addEventListener(clearAll, "click", () => {
+    if(store.getState().todos.length === 0){
+      alert("No todos to clear");
+      return;
+    };
     store.setState({ todos: [], lastChangedProp: "todos" });
   });
 
   // Bind click event to 'Clear Completed' button
   const clearCompletedBtn = document.querySelector(".clear-completed");
   addEventListener(clearCompletedBtn, "click", () => {
+    let completedTodos = store.getState().todos.filter((todo) => todo.completed);
+    if(completedTodos.length === 0){
+      alert("No completed todos to clear");
+      return;
+    };
     const todos = store.getState().todos.filter((todo) => !todo.completed);
     store.setState({ todos, lastChangedProp: "todos" });
   });
@@ -420,7 +424,8 @@ function renderTodos(todos, filter) {
   const remainingCount = todos.filter((todo) => !todo.completed).length;
   document.querySelector(
     ".remaining-items"
-  ).textContent = `${remainingCount} item${remainingCount === 1 ? "" : "s"
+  ).textContent = `${remainingCount} item${
+    remainingCount === 1 ? "" : "s"
   } remaining`;
   if (remainingCount === 0) {
     if (todos.length > 0) {
@@ -480,4 +485,3 @@ function renderFilters(filter) {
     link.classList.toggle("selected", filter === filterValue);
   });
 }
-
